@@ -1,0 +1,137 @@
+#STEP 3-Tkinter
+from tkinter import *
+from gtts import gTTS #pip install gtts for windows, pip3 install gtts for mac
+import os
+from tkinter import filedialog
+#change to functions in 3rd step in tkinter app-one button and 1 input
+#then creating tkinter app
+import tkinter as tk
+root = tk.Tk()#creates the window
+root.geometry("400x400")#sizing of window
+
+title = tk.Label(root, text="Welcome to the text to speech API!", font=20)#fontsize
+title.pack()#packs widgets into rows or columns
+title['fg'] = 'purple'#colour of text
+title['bg'] = 'yellow'#highlight
+t = tk.StringVar()
+
+#FIRST OPTION
+def Text_to_speech():
+    
+    #create the text box
+    text = tk.Entry(root, textvariable=t, width=50) #tk.Entry creates the text box
+    #root creates a main application window (has title bar and borders)
+    text.pack() #declares position of widgits 
+    t.set("Example of text") #fills in the text box for you
+
+    # THE LANGUAGE
+        # THE LABEL
+    langset = tk.Label(root, text="Choose language (default is english=en)")
+    langset.pack()
+        # THE ENTRY WIDGET
+    lan = tk.StringVar()#similar to input() for strings
+    language = tk.Entry(root, textvariable=lan)
+    language.pack()
+    lan.set("en")
+    
+    # THE NAME OF THE FILE
+    mp3 = tk.StringVar()
+    mp3title = tk.Entry(root, textvariable=mp3, width=50)
+    mp3title.pack()
+    mp3.set("myfile")
+    #the button
+    button = tk.Button(root, text = "PLAY", font = 'arial 15 bold', command = Text_to_speech ,width = '4')#.place(x=25,y=140)
+    button.pack(padx=10, pady=10)#this tells Python to put or pack button in window
+
+    s = gTTS(text.get(), lang=lan.get())
+    s.save(f"{mp3.get()}.mp3")
+    filename = mp3.get() + ".mp3"
+    os.system("start " + filename)
+
+def googletranslate():
+    from google_trans_new import google_translator
+    #translating anything to english
+    translator = google_translator()
+
+def langlist():
+    ws = Tk()
+    ws.title("PythonGuides")
+    ws.geometry("400x450")
+    ws['bg']='#fb0'
+
+    txtarea = Text(ws, width=40, height=20)
+    txtarea.pack(pady=20)
+
+    pathh = Entry(ws)
+    pathh.pack(side=LEFT, expand=True, fill=X, padx=20)
+
+
+
+    Button(
+        ws, 
+        text="Open File", 
+        command=openFile
+        ).pack(side=RIGHT, expand=True, fill=X, padx=20)
+
+
+    ws.mainloop()
+    pass
+def openFile():
+    tf = filedialog.askopenfilename(
+        initialdir="C:/Users/MainFrame/Desktop/", 
+        title="Open Text file", 
+        filetypes=(("Text Files", "*.txt"),)
+        )
+    pathh.insert(END, tf)
+    tf = open(tf)  # or tf = open(tf, 'r')
+    data = tf.read()
+    txtarea.insert(END, data)
+    tf.close()
+    
+#adding the drop down menu to add translation option
+t = tk.StringVar()
+OPTIONS = [
+"accents",
+"displaylang",
+"translation",
+"audiobook"
+] #etc
+
+def accents():
+    Text_to_speech()
+    pass
+
+def displaylang():
+    langlist()
+    pass
+
+def translation():
+    print("File Saved")
+    googletranslate()
+    pass
+
+
+def audiobook():
+    print("Object Created")
+    pass
+
+
+def picker():
+    if variable.get() == "accents":
+        accents()
+    if variable.get() == "displaylang":
+        langlist()
+    if variable.get() == "translation":
+        translation()
+    if variable.get() == "audiobook":
+        audiobook()
+        
+variable = StringVar(root)
+variable.set(OPTIONS[0]) # default value
+
+om = OptionMenu(root, variable, *OPTIONS)
+om.pack()
+
+caller_button = Button(text="Select", command=lambda: picker())
+caller_button.pack(pady=10)
+
